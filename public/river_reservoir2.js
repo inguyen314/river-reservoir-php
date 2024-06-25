@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingIndicator.style.display = 'block';
 
     // Gage control json file
-    const jsonFileURL = 'https://wm.mvs.ds.usace.army.mil/php-data-api/public/json/gage_control.json';
+    const jsonFileURL = 'https://wm.mvs.ds.usace.army.mil/php_data_api/public/json/gage_control.json';
     console.log('jsonFileURL: ', jsonFileURL);
     
     // Fetch the initial gage control data
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create an array of promises for the second fetch based on basin data
             const fetchPromises = gageControlJsonData.map(item => {
                 const basin = item.basin;
-                const fetchGageControlMetaDataUrl = `https://wm.mvs.ds.usace.army.mil/php-data-api/public/get_gage_control_by_basin.php?basin=${basin}`;
+                const fetchGageControlMetaDataUrl = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_gage_control_by_basin.php?basin=${basin}`;
                 console.log('fetchGageControlMetaDataUrl: ', fetchGageControlMetaDataUrl);
 
                 // Return the fetch promise for each basin

@@ -88,7 +88,7 @@ if (ini_get('date.timezone')) {
                                         <div class="alert">
                                             <strong>May 05, 2024 - Version V2.0</strong> - This report was build using PHP, CWMS and JavaScript, no coldfusion schema was used <br>
                                             <strong>May 30, 2024 - Version V2.1</strong> - gage_control3.json was used <br>
-                                            <strong>June 12, 2024 - Version V2.2</strong> - php-data-api was used <br>
+                                            <strong>June 12, 2024 - Version V2.2</strong> - php_data_api was used <br>
                                         </div>
                                     </div>
                                 </div>
