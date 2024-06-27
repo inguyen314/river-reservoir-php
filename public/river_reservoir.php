@@ -53,7 +53,7 @@ if (ini_get('date.timezone')) {
 						<div id="topPane" class="col-md backend-cp-collapsible">
 							<div class="box-usace">
 								<h2 class="box-header-striped">
-									<span class="titleLabel title">River Reservoir PHP V2.1</span>
+									<span class="titleLabel title">River Reservoir PHP</span>
 									<span class="rss"></span>
 								</h2>
 								<div class="box-content" style="background-color:white;margin:auto">
@@ -85,10 +85,7 @@ if (ini_get('date.timezone')) {
                                 </h2>
                                 <div class="box-content" style="background-color:white;margin:auto">
                                     <div class="content">
-                                        <div class="alert">
-                                            <strong>May 05, 2024 - Version V2.0</strong> - This report was build using PHP, CWMS and JavaScript, no coldfusion schema was used <br>
-                                            <strong>May 30, 2024 - Version V2.1</strong> - gage_control3.json was used <br>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
