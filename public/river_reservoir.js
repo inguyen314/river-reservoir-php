@@ -3,28 +3,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingIndicator = document.getElementById('loading_river_reservoir');
     loadingIndicator.style.display = 'block';
 
-    // Define the path to the JSON file
-    const jsonFilePath = '../../gage_data/public/json/gage_control3.json';
+    // Gage control json file
+    const jsonFileURL = '../../../php_data_api/public/json/gage_control.json';
+    console.log('jsonFileURL: ', jsonFileURL);
     
     // Fetch the initial gage control data
-    fetch(jsonFilePath)
+    fetch(jsonFileURL)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
         })
-        .then(async gageControlData => {
-            console.log('Gage Control JSON Data:', gageControlData);
+        .then(async gageControlJsonData => {
+            console.log('gageControlJsonData: ', gageControlJsonData);
 
             // Create an array of promises for the second fetch based on basin data
-            const fetchPromises = gageControlData.map(item => {
+            const fetchPromises = gageControlJsonData.map(item => {
                 const basin = item.basin;
-                const secondFetchUrl = `get_gage_control.php?basin=${basin}`;
-                console.log('Fetching URL:', secondFetchUrl);
+                const fetchGageControlMetaDataUrl = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_gage_control_by_basin.php?basin=${basin}`;
+                console.log('fetchGageControlMetaDataUrl: ', fetchGageControlMetaDataUrl);
 
                 // Return the fetch promise for each basin
-                return fetch(secondFetchUrl)
+                return fetch(fetchGageControlMetaDataUrl)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -35,11 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Wait for all fetch operations to complete
             return Promise.all(fetchPromises)
-                .then(secondDataArray => {
-                    console.log('Second Fetch Data:', secondDataArray);
+                .then(gageControlMetaData => {
+                    console.log('gageControlMetaData: ', gageControlMetaData);
 
                     // Merge the initial gage control data with the second fetch data
-                    const mergedData = mergeData(gageControlData, secondDataArray);
+                    const mergedData = mergeData(gageControlJsonData, gageControlMetaData);
                     console.log('mergedData: ', mergedData);
 
                     // Remove basins that you dont need
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================== JSON FUNCTIONS ============================= // 
 // ======================================================================= //
 // Function to merge two jsons based on basin and location
-function mergeData(data, secondDataArray) {
+function mergeData(data, gageControlMetaData) {
     if (Array.isArray(data) && data.length > 0) {
         // Iterate through each basin in data
         data.forEach(basin => {
@@ -153,8 +154,8 @@ function mergeData(data, secondDataArray) {
             if (Array.isArray(basin.gages) && basin.gages.length > 0) {
                 // Iterate through each gage in the current basin's gages
                 basin.gages.forEach(gage => {
-                    // Find the matching data in secondDataArray based on location_id
-                    secondDataArray.forEach(dataArr => {
+                    // Find the matching data in gageControlMetaData based on location_id
+                    gageControlMetaData.forEach(dataArr => {
                         const matchedObj = dataArr.find(obj => obj.location_id === gage.location_id);
                         if (matchedObj) {
                             // Merge the matched data into the corresponding location object
