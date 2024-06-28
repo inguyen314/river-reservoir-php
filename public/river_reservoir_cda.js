@@ -986,14 +986,14 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
                                 const rivermileCell = document.createElement('td');
                                 if (locData.river_mile_hard_coded !== null) {
                                     if (locData.river_mile_hard_coded > 900) {
-                                        rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + ""  + '</div>';
+                                        rivermileCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + ""  + '</div>';
                                     } else if (locData.river_mile_hard_coded < 9 || (Number.isInteger((locData.river_mile_hard_coded)))) {
-                                        rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + (locData.river_mile_hard_coded).toFixed(1).padStart(4, '0')  + '</div>';
+                                        rivermileCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + (locData.river_mile_hard_coded).toFixed(1).padStart(4, '0')  + '</div>';
                                     } else {
-                                        rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + (locData.river_mile_hard_coded).toFixed(1) + '</div>';
+                                        rivermileCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + (locData.river_mile_hard_coded).toFixed(1) + '</div>';
                                     }
                                 } else { 
-                                    rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + "--"  + '</div>';
+                                    rivermileCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + "--"  + '</div>';
                                 }
                                 locationRow.appendChild(rivermileCell);
                                 
@@ -1058,7 +1058,7 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
                                 // RECORD DATE
                                 const recordStageDateCell = document.createElement('td');
                                 if (locData.recordstage !== null && locData.recordstage !== undefined) {
-                                    recordStageDateCell.innerHTML = '<div style="background-color: orange;">-cdana-</div>';
+                                    recordStageDateCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + locData.record_stage_date_hard_coded + '</div>';
                                 }
                                 locationRow.appendChild(recordStageDateCell);
                             }
@@ -1309,7 +1309,7 @@ function createReservoirTableBody(allData) {
                     // RECORD STAGE DATE CDA
                     const recordStageDateCell = document.createElement('td');
                     if (locData.recordstage !== null && locData.recordstage !== undefined) {
-                        recordStageDateCell.innerHTML = '<div style="background-color: orange;">-cdana-</div>';
+                        recordStageDateCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + locData.record_stage_date_hard_coded + '</div>';
                     }
                     locationLakeRow.appendChild(recordStageDateCell);
 
