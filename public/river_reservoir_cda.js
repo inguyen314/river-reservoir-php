@@ -1268,7 +1268,47 @@ function createReservoirTableBody(allData) {
 
                     // MIDNIGHT (PHP ONLY)
                     const midnightCell = document.createElement('td');
-                    midnightCell.innerHTML = '<div style="background-color: orange;">-schema-</div>';
+                    // Function to fetch and log ROutput data
+                    async function fetchAndLogData(location_id, midnightCell) {
+                        try {
+                            const ROutput = await fetchDataFromROutput();
+                            console.log('ROutput:', ROutput);
+                            
+                            const filteredData = filterDataByLocationId(ROutput, location_id);
+                            console.log("Filtered Data for", location_id + ":", filteredData);
+
+                            // Update the HTML element with filtered data
+                            updateHTML(filteredData, midnightCell);
+                            
+                            // Further processing of ROutput data as needed
+                        } catch (error) {
+                            // Handle errors from fetchDataFromROutput
+                            console.error('Failed to fetch data:', error);
+                        }
+                    }
+
+                    // Function to filter ROutput data by location_id
+                    function filterDataByLocationId(ROutput, location_id) {
+                        const filteredData = {};
+
+                        for (const key in ROutput) {
+                            if (ROutput.hasOwnProperty(key) && key === location_id) {
+                                filteredData[key] = ROutput[key];
+                                break; // Since location_id should be unique, we can break early
+                            }
+                        }
+
+                        return filteredData;
+                    }
+
+                    // Function to update the HTML element with filtered data
+                    function updateHTML(filteredData, midnightCell) {
+                        const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
+                        midnightCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option Yet">${locationData.outflow_midnight}</div>`;
+                    }
+
+                    // Example: Call fetchAndLogData with a specific location_id
+                    fetchAndLogData(locData.location_id, midnightCell);             
                     
 
                     // EVENING (PHP ONLY)
@@ -1678,6 +1718,22 @@ function fetchAndUpdateCrest(crestCell, tsidCrest, flood_level, currentDateTime,
     }
 }
 
+// Function to fetch R output for lake table
+async function fetchDataFromROutput() {
+    const url = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
+  
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error; // Propagate the error further if needed
+    }
+}
 
 // ================================================================================== // 
 // ========================== RESERVOIR FETCH FUNCTIONS ============================= // 

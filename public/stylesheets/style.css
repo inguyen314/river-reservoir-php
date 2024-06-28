@@ -63,6 +63,10 @@ hr {
 	color: black; /* Base text color */
 	text-shadow: 0 0 5px orange;
 }
+.hard_coded_php {
+	color: black; /* Base text color */
+	text-shadow: 0 0 5px purple;
+}
 
 /*** ===================================================================================== ***/
 /*** ===== SPAN CLASSES ===== ***/
