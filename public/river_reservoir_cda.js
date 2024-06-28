@@ -984,14 +984,17 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
     
                                 // RIVER MILE
                                 const rivermileCell = document.createElement('td');
-                                // if (Number(locData.station) > 900) {
-                                //     rivermileCell.textContent = "";
-                                // } else if (Number(locData.station) < 9 || (Number.isInteger((Number(locData.station))))) {
-                                //     rivermileCell.textContent = (Number(locData.station)).toFixed(1).padStart(4, '0');
-                                // } else {
-                                //     rivermileCell.textContent = (Number(locData.station)).toFixed(1);
-                                // }
-                                rivermileCell.innerHTML = '<div style="background-color: orange;">-cdana-</div>';
+                                if (locData.river_mile_hard_coded !== null) {
+                                    if (locData.river_mile_hard_coded > 900) {
+                                        rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + ""  + '</div>';
+                                    } else if (locData.river_mile_hard_coded < 9 || (Number.isInteger((locData.river_mile_hard_coded)))) {
+                                        rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + (locData.river_mile_hard_coded).toFixed(1).padStart(4, '0')  + '</div>';
+                                    } else {
+                                        rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + (locData.river_mile_hard_coded).toFixed(1) + '</div>';
+                                    }
+                                } else { 
+                                    rivermileCell.innerHTML = '<div style="background-color: orange;" title="Hard Coded in JSON, No Cloud Option Yet">' + "--"  + '</div>';
+                                }
                                 locationRow.appendChild(rivermileCell);
                                 
                                 // LOCATION
@@ -1362,7 +1365,6 @@ function fetchAndUpdateStage(stageCell, deltaCell, tsidStage, flood_level, curre
 
                 console.log("stageFormatted = ", stage);
 
-
                 // Get the last non-null value from the stage data
                 const lastNonNullValue = getLastNonNullValue(stage);
                 console.log("lastNonNullValue:", lastNonNullValue);
@@ -1386,7 +1388,6 @@ function fetchAndUpdateStage(stageCell, deltaCell, tsidStage, flood_level, curre
                 const c_count = calculateCCount(tsidStage);
                 console.log("c_count:", c_count);
 
-
                 const lastNonNull24HoursValue = getLastNonNull24HoursValue(stage, c_count);
                 console.log("lastNonNull24HoursValue:", lastNonNull24HoursValue);
 
@@ -1405,7 +1406,6 @@ function fetchAndUpdateStage(stageCell, deltaCell, tsidStage, flood_level, curre
                     // If no non-null valueLast is found, log a message
                     console.log("No non-null valueLast found.");
                 }
-
 
                 // Calculate the 24 hours change between first and last value
                 const delta_24 = (valueLast - value24HoursLast).toFixed(2);
@@ -1433,39 +1433,22 @@ function fetchAndUpdateStage(stageCell, deltaCell, tsidStage, flood_level, curre
                 // console.log("dateTimeClass:", dateTimeClass);
 
                 if (valueLast === null) {
-                    // innerHTMLStage = "-M-";
-                    innerHTMLStage = "<span class='missing'>"
+                    innerHTMLStage  = "<span class='missing'>"
                                     + "-M-"
                                     + "</span>"
                                     + "<span class='--'>"
                                     + "label"
                                     + "</span>";
                 } else {
-                    // innerHTMLStage = lastValue.toFixed(2)
-                    innerHTMLStage = "<span class='" + floodClass + "' title='" + stage.name + ", Value = " + valueLast + ", Date Time = " + timestampLast + "'>"
-                                    //+ "<a href='https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + stage.name + "&start_day=4&end_day=0' target='_blank'>"
+                    innerHTMLStage  = "<span class='" + floodClass + "' title='" + stage.name + ", Value = " + valueLast + ", Date Time = " + timestampLast + "'>"
+                                    + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + stage.name + "&start_day=4&end_day=0' target='_blank'>"
                                     + valueLast
-                                    // + "</a>"
+                                    + "</a>"
                                     +"</span>"; 
-                                    //+ " " 
-                                    //+ stage.units
-                                    //+ " (" + "<span title='" + stage.name + ", Value = " + value24HoursLast + ", Date Time = " + timestamp24HoursLast + ", Delta = (" + valueLast + " - " + value24HoursLast + ") = " + delta_24 + "'>" + delta_24 + "</span>" + ")"
-                                    //+ "<br>" 
-                                    //+ "<span class='" + dateTimeClass + "'>"
-                                    //+ formattedLastValueTimeStamp
-                                    //+ "</span>";
-                    innerHTMLDelta = //"<span class='" + floodClass + "' title='" + stage.name + ", Value = " + valueLast + ", Date Time = " + timestampLast + "'>"
-                                    //+ "<a href='https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + stage.name + "&start_day=4&end_day=0' target='_blank'>"
-                                    //+ valueLast
-                                    // + "</a>"
-                                    //+"</span>"; 
-                                    //+ " " 
-                                    //+ stage.units
-                                    "<span title='" + stage.name + ", Value = " + value24HoursLast + ", Date Time = " + timestamp24HoursLast + ", Delta = (" + valueLast + " - " + value24HoursLast + ") = " + delta_24 + "'>" + delta_24 + "</span>";
-                                    //+ "<br>" 
-                                    //+ "<span class='" + dateTimeClass + "'>"
-                                    //+ formattedLastValueTimeStamp
-                                    //+ "</span>";
+                    innerHTMLDelta  = "<span title='" + stage.name + ", Value = " + value24HoursLast + ", Date Time = " + timestamp24HoursLast + ", Delta = (" + valueLast + " - " + value24HoursLast + ") = " + delta_24 + "'>" 
+                                    + delta_24 
+                                    + "</span>";
+                                    
                 }
                 stageCell.innerHTML = innerHTMLStage;
                 deltaCell.innerHTML = innerHTMLDelta;
@@ -1565,21 +1548,21 @@ function fetchAndUpdateNws(nwsCell, forecastTimeCell, tsidStage, tsid_stage_nws_
                 
                 if (nws3Days !== null) {
                     innerHTMLStage  = "<span class='" + floodClassDay1 + "' style='margin-right: 7px;margin-left: 7px;'>" 
-                                    + "<a href='../../../web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + firstFirstValue + "' target='_blank'>"
+                                    // + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + firstFirstValue + "' target='_blank'>"
                                     + firstMiddleValue
-                                    + "</a>"
+                                    // + "</a>"
                                     + "</span>"
                                     // + " | "
                                     + "<span class='" + floodClassDay2 + "' style='margin-right: 7px;margin-left: 7px;'>" 
-                                    + "<a href='../../../web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + secondFirstValue + "' target='_blank'>"
+                                    // + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + secondFirstValue + "' target='_blank'>"
                                     + secondMiddleValue
-                                    + "</a>"
+                                    // + "</a>"
                                     + "</span>"
                                     // + " | "
                                     + "<span class='" + floodClassDay3 + "' style='margin-right: 7px;margin-left: 7px;'>" 
-                                    + "<a href='../../../web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + thirdFirstValue + "' target='_blank'>"
+                                    // + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + thirdFirstValue + "' target='_blank'>"
                                     +  thirdMiddleValue
-                                    + "</a>"
+                                    // + "</a>"
                                     + "</span>";
 
                     innerHTMLForecastTime = "<span class='missing' style='background-color: orange;'>" + "-cdana-" + "</span>";
