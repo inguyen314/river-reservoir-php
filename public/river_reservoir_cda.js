@@ -2565,10 +2565,17 @@ function extractValuesWithTimeNoon(values) {
  ******************************************************************************/
 // Function to fetch R output for lake table
 async function fetchDataFromROutput() {
-    const url = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
-  
+    let urlR = null;
+    if (cda === "public") {
+        urlR = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
+    } else if (cda === "internal") {
+        urlR = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
+    } else {
+
+    }
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(urlR);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
