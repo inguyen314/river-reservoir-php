@@ -2565,6 +2565,7 @@ function extractValuesWithTimeNoon(values) {
  ******************************************************************************/
 // Function to fetch R output for lake table
 async function fetchDataFromROutput() {
+    // TODO: update link and push outputR.json to public web 
     let urlR = null;
     if (cda === "public") {
         urlR = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
