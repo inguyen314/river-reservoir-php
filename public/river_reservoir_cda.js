@@ -627,9 +627,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 
-// ======================================================================= // 
-// ========================== JSON FUNCTIONS ============================= // 
-// ======================================================================= //
+/******************************************************************************
+ *                               JSON FUNCTIONS                               *
+ ******************************************************************************/
 // Function to merge basinData with additional data
 function mergeData(basinData, combinedFirstData, combinedSecondData, combinedForthData, combinedFifthData, combinedSixthData, combinedSeventhData, combinedEighthData, combinedNinethData, combinedTenthData) {
     // Check if basinData is an array and has elements
@@ -802,9 +802,9 @@ function mergeData(basinData, combinedFirstData, combinedSecondData, combinedFor
 }
 
 
-// ================================================================================== // 
-// ========================== RESERVOIR RIVER FUNCTIONS ============================= // 
-// ================================================================================== //
+/******************************************************************************
+ *                         RESERVOIR RIVER FUNCTIONS                          *
+ ******************************************************************************/
 // Function to create and populate the river table header
 function createRiverTableHeader(nws_day1_date_title, nws_day2_date_title, nws_day3_date_title) {
     // Create a table element
@@ -997,11 +997,13 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
                                 }
                                 locationRow.appendChild(rivermileCell);
                                 
+
                                 // LOCATION
                                 const locationCell = document.createElement('td');
                                 locationCell.innerHTML = "<span title='" + locData.location_id + "'>" + locData.metadata["public-name"] + "<span>";
                                 locationRow.appendChild(locationCell);
     
+
                                 // STAGE
                                 const stageCell = document.createElement('td');
                                 stageCell.textContent = "";
@@ -1021,6 +1023,7 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
                                 const nwsCell = document.createElement('td');
                                 nwsCell.textContent = "";
                                 
+
                                 // FORECAST TIME
                                 const forecastTimeCell = document.createElement('td');
                                 forecastTimeCell.textContent = "";
@@ -1036,16 +1039,19 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
                                 fetchAndUpdateCrest(crestCell, locData.tsid_crest, flood_level, currentDateTime, currentDateTimePlus14Days);
                                 locationRow.appendChild(crestCell);
     
+
                                 // FLOOD LEVEL
                                 const floodCell = document.createElement('td');
                                 floodCell.innerHTML = "<span title='" + locData.level_id + "'>" + (flood_level === null ? "" : flood_level)  + "<span>";
                                 locationRow.appendChild(floodCell);
     
+
                                 // GAGE ZERO
                                 const elevationCell = document.createElement('td');
                                 elevationCell.innerHTML = "<span class='" + (locData.metadata["vertical-datum"] === "NGVD29" ? "ngvd29" : "--") + "' title='" + locData.metadata["vertical-datum"] + "'>" + (parseFloat(locData.metadata["elevation"])).toFixed(2)   + "<span>";
                                 locationRow.appendChild(elevationCell);
     
+
                                 // RECORD STAGE
                                 const recordStageCell = document.createElement('td');
                                 if (locData.recordstage !== null && locData.recordstage !== undefined) {
@@ -1055,6 +1061,7 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
                                 }
                                 locationRow.appendChild(recordStageCell);
                                 
+
                                 // RECORD DATE
                                 const recordStageDateCell = document.createElement('td');
                                 if (locData.recordstage !== null && locData.recordstage !== undefined) {
@@ -1074,9 +1081,9 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
 }
 
 
-// ================================================================================= // 
-// ========================== RESERVOIR LAKE FUNCTIONS ============================= // 
-// ================================================================================= //
+/******************************************************************************
+ *                          RESERVOIR LAKE FUNCTIONS                          *
+ ******************************************************************************/
 // Function to create and populate the table header for Reservoirs
 function createReservoirTableHeader() {
     // Create a table element
@@ -1219,13 +1226,13 @@ function createReservoirTableBody(allData) {
                     const top_of_flood = locData.top_of_flood["constant-value"];
                     const bottom_of_flood = locData.bottom_of_flood["constant-value"];
 
-
                     console.log('Reservoir Lake = :', locData.location_id);
 
                     // LAKE
                     const locationLakeCell = document.createElement('td');
                     locationLakeCell.innerHTML = "<span title='" + locData.location_id + "'>" + locData.metadata["public-name"] + "<span>";
                     locationLakeRow.appendChild(locationLakeCell);
+
 
                     // CURRENT LEVEL (Convert this to CDA)
                     const levelCell = document.createElement('td');
@@ -1254,11 +1261,13 @@ function createReservoirTableBody(allData) {
                     locationLakeRow.appendChild(conservationCell);
                     locationLakeRow.appendChild(floodCell);
 
+
                     // PRECIP (Convert this to CDA)
                     const precipCell = document.createElement('td');
                     precipCell.innerHTML = "--";
                     fetchAndUpdatePrecip(precipCell, locData.tsid_precip_lake, currentDateTime, currentDateTimeMinus30Hours);
                     locationLakeRow.appendChild(precipCell);
+
 
                     // YESTERDAY INFLOW (Convert this to CDA)
                     const inflowCell = document.createElement('td');
@@ -1266,76 +1275,38 @@ function createReservoirTableBody(allData) {
                     fetchAndUpdateInflow(inflowCell, locData.tsid_yesterday_inflow, currentDateTime, currentDateTimeMinus30Hours);
                     locationLakeRow.appendChild(inflowCell);
 
+
                     // MIDNIGHT (PHP ONLY)
                     const midnightCell = document.createElement('td');
-                    // Function to fetch and log ROutput data
-                    async function fetchAndLogData(location_id, midnightCell) {
-                        try {
-                            const ROutput = await fetchDataFromROutput();
-                            console.log('ROutput:', ROutput);
-                            
-                            const filteredData = filterDataByLocationId(ROutput, location_id);
-                            console.log("Filtered Data for", location_id + ":", filteredData);
-
-                            // Update the HTML element with filtered data
-                            updateHTML(filteredData, midnightCell);
-                            
-                            // Further processing of ROutput data as needed
-                        } catch (error) {
-                            // Handle errors from fetchDataFromROutput
-                            console.error('Failed to fetch data:', error);
-                        }
-                    }
-
-                    // Function to filter ROutput data by location_id
-                    function filterDataByLocationId(ROutput, location_id) {
-                        const filteredData = {};
-
-                        for (const key in ROutput) {
-                            if (ROutput.hasOwnProperty(key) && key === location_id) {
-                                filteredData[key] = ROutput[key];
-                                break; // Since location_id should be unique, we can break early
-                            }
-                        }
-
-                        return filteredData;
-                    }
-
-                    // Function to update the HTML element with filtered data
-                    function updateHTML(filteredData, midnightCell) {
-                        const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
-                        midnightCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option Yet">${locationData.outflow_midnight}</div>`;
-                    }
-
-                    // Example: Call fetchAndLogData with a specific location_id
-                    fetchAndLogData(locData.location_id, midnightCell);             
+                    const eveningCell = document.createElement('td');
+                    const seasonalRuleCurveCell = document.createElement('td');
+                    const crestCell = document.createElement('td');
+                    const crestDateCell = document.createElement('td');
+                    fetchAndLogFlowData(locData.location_id, midnightCell, eveningCell, seasonalRuleCurveCell, crestCell, crestDateCell);             
                     
+                    locationLakeRow.appendChild(midnightCell);
+
 
                     // EVENING (PHP ONLY)
-                    const eveningCell = document.createElement('td');
-                    eveningCell.innerHTML = '<div style="background-color: orange;">-schema-</div>';
-
-                    // fetchAndUpdateOutflow(midnightCell, eveningCell, locData.location_id);
-                    locationLakeRow.appendChild(midnightCell);
                     locationLakeRow.appendChild(eveningCell);
 
+
                     // SEASONAL RULE CURVE (Convert this to CDA)
-                    const seasonalRuleCurveCell = document.createElement('td');
-                    seasonalRuleCurveCell.innerHTML = '<div style="background-color: orange;">-schema-</div>';
-                    // fetchAndUpdateSeasonalRuleCurve(seasonalRuleCurveCell, locData.location_id);
+                    // seasonalRuleCurveCell.innerHTML = '<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">--</div>';
+                    // fetchAndUpdateSeasonalRuleCurve(seasonalRuleCurveCell, locData.location_id); // Call this when CDA is available
                     locationLakeRow.appendChild(seasonalRuleCurveCell);
 
-                    // CREST (PHP ONLY)
-                    const crestCell = document.createElement('td');
-                    crestCell.innerHTML = '<div style="background-color: orange;">-schema-</div>';
-                    
-                    // CREST DATE (PHP ONLY)
-                    const crestDateCell = document.createElement('td');
-                    crestDateCell.innerHTML = '<div style="background-color: orange;">-schema-</div>';
 
-                    // fetchAndUpdateCrestForecast(crestCell, crestDateCell, locData.location_id);
+                    // CREST (PHP ONLY)
+                    // crestCell.innerHTML = '<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">--</div>'; // Call this when CDA is available
                     locationLakeRow.appendChild(crestCell);
+
+
+                    // CREST DATE (PHP ONLY)
+                    // crestDateCell.innerHTML = '<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">--</div>'; // Call this when CDA is available
+                    // fetchAndUpdateCrestForecast(crestCell, crestDateCell, locData.location_id);
                     locationLakeRow.appendChild(crestDateCell);
+
 
                     // RECORD STAGE CDA
                     const recordStageCell = document.createElement('td');
@@ -1345,6 +1316,7 @@ function createReservoirTableBody(allData) {
                         recordStageCell.innerHTML = "";
                     }
                     locationLakeRow.appendChild(recordStageCell);
+
 
                     // RECORD STAGE DATE CDA
                     const recordStageDateCell = document.createElement('td');
@@ -1361,9 +1333,9 @@ function createReservoirTableBody(allData) {
 }
 
 
-// ============================================================================== // 
-// ========================== RIVER FETCH FUNCTIONS ============================= // 
-// ============================================================================== //
+/******************************************************************************
+ *                          RIVER FETCH FUNCTIONS                             *
+ ******************************************************************************/
 // Function to get stage data
 function fetchAndUpdateStage(stageCell, deltaCell, tsidStage, flood_level, currentDateTimeMinus2Hours, currentDateTime, currentDateTimeMinus30Hours) {
     if (tsidStage !== null) {
@@ -1605,7 +1577,7 @@ function fetchAndUpdateNws(nwsCell, forecastTimeCell, tsidStage, tsid_stage_nws_
                                     // + "</a>"
                                     + "</span>";
 
-                    innerHTMLForecastTime = "<span class='missing' style='background-color: orange;'>" + "-cdana-" + "</span>";
+                    innerHTMLForecastTime = "<span class='hard_coded_php' title='Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet'>" + "--" + "</span>";
                 } else {
                     innerHTMLStage  = "<span class='missing'>" + "-M-" + "</span>";
                     innerHTMLForecastTime = "<span class='missing' style='background-color: orange;'>" + "-cdana-" + "</span>";
@@ -1718,26 +1690,10 @@ function fetchAndUpdateCrest(crestCell, tsidCrest, flood_level, currentDateTime,
     }
 }
 
-// Function to fetch R output for lake table
-async function fetchDataFromROutput() {
-    const url = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
-  
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error; // Propagate the error further if needed
-    }
-}
 
-// ================================================================================== // 
-// ========================== RESERVOIR FETCH FUNCTIONS ============================= // 
-// ================================================================================== //
+/******************************************************************************
+ *                          RESERVOIR FETCH FUNCTIONS                         *
+ ******************************************************************************/
 // Function to get lake level data
 function fetchAndUpdateLevel(levelCell, deltaCell, tsidStage, flood_level, top_of_conservation, bottom_of_conservation, top_of_flood, bottom_of_flood, currentDateTimeMinus2Hours, currentDateTime, currentDateTimeMinus30Hours) {
     if (tsidStage !== null) {
@@ -2380,9 +2336,9 @@ function fetchAndUpdateCrestForecast(crestCell, crestDateCell, location_id) {
 }
 
 
-// ========================================================================== // 
-// ========================== SUPPORT FUNCTIONS ============================= // 
-// ========================================================================== //
+/******************************************************************************
+ *                               SUPPORT FUNCTIONS                            *
+ ******************************************************************************/
 // Function to get current data time
 function subtractHoursFromDate(date, hoursToSubtract) {
     return new Date(date.getTime() - (hoursToSubtract * 60 * 60 * 1000));
@@ -2450,9 +2406,9 @@ function determineStageDateTimeClass(stage29_date_time_cst_formatted, currentDat
 }
 
 
-// ========================================================================== // 
-// ========================== SUPPORT CDA FUNCTIONS ============================= // 
-// ========================================================================== //
+/******************************************************************************
+ *                               SUPPORT CDA FUNCTIONS                        *
+ ******************************************************************************/
 // Function to get the first non-null value from values array
 function getFirstNonNullValue(data) {
     // Iterate over the values array
@@ -2610,4 +2566,108 @@ function extractValuesWithTimeNoon(values) {
         const minutes = timestamp.getMinutes();
         return (hours === 7 || hours === 6) && minutes === 0; // Check if time is 13:00
     });
+}
+
+
+/******************************************************************************
+ *                               FUNCTIONS PHP JSON                           *
+ ******************************************************************************/
+// Function to fetch R output for lake table
+async function fetchDataFromROutput() {
+    const url = 'https://wm.mvs.ds.usace.army.mil/web_apps/board/public/outputR.json';
+  
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error; // Propagate the error further if needed
+    }
+}
+
+// Function to filter ROutput data by location_id
+function filterDataByLocationId(ROutput, location_id) {
+    const filteredData = {};
+
+    for (const key in ROutput) {
+        if (ROutput.hasOwnProperty(key) && key === location_id) {
+            filteredData[key] = ROutput[key];
+            break; // Since location_id should be unique, we can break early
+        }
+    }
+
+    return filteredData;
+}
+
+// Function to fetch and log ROutput data
+async function fetchAndLogFlowData(location_id, midnightCell, eveningCell, seasonalRuleCurveCell, crestCell, crestDateCell) {
+    try {
+        const ROutput = await fetchDataFromROutput();
+        console.log('ROutput:', ROutput);
+        
+        const filteredData = filterDataByLocationId(ROutput, location_id);
+        console.log("Filtered Data for", location_id + ":", filteredData);
+
+        // Update the HTML element with filtered data
+        updateFlowMidnightHTML(filteredData, midnightCell);
+
+        // Update the HTML element with filtered data
+        updateFlowEveningHTML(filteredData, eveningCell);
+
+        // Update the HTML element with filtered data
+        updateRuleCurveHTML(filteredData, seasonalRuleCurveCell);
+
+        // Update the HTML element with filtered data
+        updateCrestHTML(filteredData, crestCell);
+
+        // Update the HTML element with filtered data
+        updateCrestDateHTML(filteredData, crestDateCell);
+        
+        // Further processing of ROutput data as needed
+    } catch (error) {
+        // Handle errors from fetchDataFromROutput
+        console.error('Failed to fetch data:', error);
+    }
+}
+
+// Function to update the HTML element with filtered data
+function updateFlowMidnightHTML(filteredData, midnightCell) {
+    const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
+    midnightCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.outflow_midnight}</div>`;
+}
+
+// Function to update the HTML element with filtered data
+function updateFlowEveningHTML(filteredData, eveningCell) {
+    const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
+    eveningCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.outflow_evening}</div>`;
+}
+
+// Function to update the HTML element with filtered data
+function updateRuleCurveHTML(filteredData, seasonalRuleCurveCell) {
+    const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
+    seasonalRuleCurveCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.rule_curve}</div>`;
+}
+
+// Function to update the HTML element with filtered data
+function updateCrestHTML(filteredData, crestCell) {
+    const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
+    if (locationData.crest !== 999.99) {
+        crestCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.crest}</div>`;
+    } else {
+        crestCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet"></div>`;
+    }
+}
+
+// Function to update the HTML element with filtered data
+function updateCrestDateHTML(filteredData, crestDateCell) {
+    const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
+    if (locationData.crest !== 999.99) {
+        crestDateCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.crest_date_time}</div>`;
+    } else {
+        crestCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet"></div>`;
+    }
 }
