@@ -803,7 +803,7 @@ function mergeData(basinData, combinedFirstData, combinedSecondData, combinedFor
 
 
 /******************************************************************************
- *                         RESERVOIR RIVER FUNCTIONS                          *
+ *                         RIVER TABLE FUNCTIONS                              *
  ******************************************************************************/
 // Function to create and populate the river table header
 function createRiverTableHeader(nws_day1_date_title, nws_day2_date_title, nws_day3_date_title) {
@@ -1082,7 +1082,7 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
 
 
 /******************************************************************************
- *                          RESERVOIR LAKE FUNCTIONS                          *
+ *                          LAKE TABLE FUNCTIONS                              *
  ******************************************************************************/
 // Function to create and populate the table header for Reservoirs
 function createReservoirTableHeader() {
@@ -1537,17 +1537,17 @@ function fetchAndUpdateNws(nwsCell, forecastTimeCell, tsidStage, tsid_stage_nws_
 
                 // Extract the second middle value
                 const firstFirstValue = valuesWithTimeNoon[1][0];
-                const firstMiddleValue = (valuesWithTimeNoon[1][1] !== null) ? ((parseFloat(valuesWithTimeNoon[1][1])).toFixed(2) < 10 ? "0" + (parseFloat(valuesWithTimeNoon[1][1])).toFixed(2) : (parseFloat(valuesWithTimeNoon[1][1])).toFixed(2)) + " | ": "";
+                const firstMiddleValue = (valuesWithTimeNoon[1][1] !== null) ? ((parseFloat(valuesWithTimeNoon[1][1])).toFixed(2) < 10 ? "0" + (parseFloat(valuesWithTimeNoon[1][1])).toFixed(2) : (parseFloat(valuesWithTimeNoon[1][1])).toFixed(2)) + "  |  ": "";
 
                 // Extract the second middle value
                 const secondFirstValue = valuesWithTimeNoon[2][0];
-                const secondMiddleValue = (valuesWithTimeNoon[2][1] !== null) ? ((parseFloat(valuesWithTimeNoon[2][1])).toFixed(2) < 10 ? "0" + (parseFloat(valuesWithTimeNoon[2][1])).toFixed(2) : (parseFloat(valuesWithTimeNoon[2][1])).toFixed(2))  + " | ": "";
+                const secondMiddleValue = (valuesWithTimeNoon[2][1] !== null) ? ((parseFloat(valuesWithTimeNoon[2][1])).toFixed(2) < 10 ? "0" + (parseFloat(valuesWithTimeNoon[2][1])).toFixed(2) : (parseFloat(valuesWithTimeNoon[2][1])).toFixed(2))  + "  |  ": "";
 
                 // Extract the second middle value
                 const thirdFirstValue = valuesWithTimeNoon[3][0];
                 const thirdMiddleValue = (valuesWithTimeNoon[3][1] !== null) ? ((parseFloat(valuesWithTimeNoon[3][1])).toFixed(2) < 10 ? "0" + (parseFloat(valuesWithTimeNoon[3][1])).toFixed(2) : (parseFloat(valuesWithTimeNoon[3][1])).toFixed(2)) : "";
 
-                // FLOOD CLASS
+                // Dertermine Flood Classes
                 var floodClassDay1 = determineStageClass(firstMiddleValue, flood_level);
                 console.log("floodClassDay1:", floodClassDay1);
 
@@ -1557,24 +1557,15 @@ function fetchAndUpdateNws(nwsCell, forecastTimeCell, tsidStage, tsid_stage_nws_
                 var floodClassDay3 = determineStageClass(thirdMiddleValue, flood_level);
                 console.log("floodClassDay3:", floodClassDay3);
 
-                
                 if (nws3Days !== null) {
-                    innerHTMLStage  = "<span class='" + floodClassDay1 + "' style='margin-right: 7px;margin-left: 7px;'>" 
-                                    // + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + firstFirstValue + "' target='_blank'>"
+                    innerHTMLStage  = "<span class='" + floodClassDay1 + "'>" 
                                     + firstMiddleValue
-                                    // + "</a>"
                                     + "</span>"
-                                    // + " | "
-                                    + "<span class='" + floodClassDay2 + "' style='margin-right: 7px;margin-left: 7px;'>" 
-                                    // + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + secondFirstValue + "' target='_blank'>"
+                                    + "<span class='" + floodClassDay2 + "'>" 
                                     + secondMiddleValue
-                                    // + "</a>"
                                     + "</span>"
-                                    // + " | "
-                                    + "<span class='" + floodClassDay3 + "' style='margin-right: 7px;margin-left: 7px;'>" 
-                                    // + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + nws3Days.name + "&start_day=0&end_day=4' title='" + nws3Days.name + " " + thirdFirstValue + "' target='_blank'>"
+                                    + "<span class='" + floodClassDay3 + "'>" 
                                     +  thirdMiddleValue
-                                    // + "</a>"
                                     + "</span>";
 
                     innerHTMLForecastTime = "<span class='hard_coded_php' title='Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet'>" + "--" + "</span>";
