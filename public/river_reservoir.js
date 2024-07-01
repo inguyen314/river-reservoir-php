@@ -963,15 +963,13 @@ function fetchAndUpdateLevel(levelCell, deltaCell, tsid_stage_29, flood_value, c
     };
     console.log("levelToSend: " + levelToSend);
   
-    
     // Convert the object into a query string
     const levelQueryString = Object.keys(levelToSend).map(key => key + '=' + levelToSend[key]).join('&');
     console.log("levelQueryString: " + levelQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    const urlStage = `get_stage.php?${levelQueryString}`;
+    const urlStage = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_level.php?${levelQueryString}`;
 
-    
     // Perform two fetch requests
     fetch(urlStage)
     .then(response => response.json())
@@ -1036,7 +1034,7 @@ function fetchAndUpdateStorage(consrCell, floodCell, location_id) {
     console.log("storageQueryString: " + storageQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    const urlStorage = `get_lake_storage.php?${storageQueryString}`;
+    const urlStorage = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_lake_storage.php?${storageQueryString}`;
     console.log("urlStorage: " + urlStorage);
 
     // Perform two fetch requests
@@ -1110,7 +1108,7 @@ function fetchAndUpdatePrecip(precipCell, location_id) {
     console.log("precipQueryString: " + precipQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    var urlPrecip = `get_precip.php?${precipQueryString}`;
+    var urlPrecip = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_lake_precip.php?${precipQueryString}`;
     console.log("urlPrecip: ", + urlPrecip);
     fetch(urlPrecip)
     .then(response => response.json())
@@ -1141,7 +1139,7 @@ function fetchAndUpdateInflow(yesterdayInflowCell, location_id) {
     console.log("inflowQueryString: " + inflowQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    var urlYesterdaysInflow = `get_inflow.php?${inflowQueryString}`;
+    var urlYesterdaysInflow = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_lake_inflow.php?${inflowQueryString}`;
     console.log("urlYesterdaysInflow: ", + urlYesterdaysInflow);
     fetch(urlYesterdaysInflow)
     .then(response => response.json())
@@ -1172,7 +1170,7 @@ function fetchAndUpdateOutflow(midnightCell, eveningCell, location_id) {
     console.log("outflowQueryString: " + outflowQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    var urlOutflow = `get_outflow.php?${outflowQueryString}`;
+    var urlOutflow = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_lake_outflow.php?${outflowQueryString}`;
     console.log("urlOutflow: ", + urlOutflow);
     fetch(urlOutflow)
     .then(response => response.json())
@@ -1231,7 +1229,7 @@ function fetchAndUpdateSeasonalRuleCurve(seasonalRuleCurveCell, location_id) {
     console.log("rule_curveQueryString: " + rule_curveQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    var urlRuleCurve = `get_rule_curve.php?${rule_curveQueryString}`;
+    var urlRuleCurve = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_rule_curve.php?${rule_curveQueryString}`;
     console.log("urlRuleCurve: ", + urlRuleCurve);
     fetch(urlRuleCurve)
     .then(response => response.json())
@@ -1271,7 +1269,7 @@ function fetchAndUpdateCrestForecast(crestCell, crestDateCell, location_id) {
     console.log("poolForecastCrestQueryString: " + poolForecastCrestQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    var urlPoolForecastCrest = `get_crest_forecast.php?${poolForecastCrestQueryString}`;
+    var urlPoolForecastCrest = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_lake_crest_forecast.php?${poolForecastCrestQueryString}`;
     console.log("urlPoolForecastCrest: " + urlPoolForecastCrest);
     fetch(urlPoolForecastCrest)
     .then(response => response.json())
