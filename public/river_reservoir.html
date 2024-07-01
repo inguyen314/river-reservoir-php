@@ -43,7 +43,7 @@
                 <div class="container-fluid">
                 <div id="breadcrumbs">
                     </div>
-                    <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+                    <!-- First Content Block -->
                     <div class="page-content">
 						<div id="topPane" class="col-md backend-cp-collapsible">
 							<div class="box-usace">
@@ -100,26 +100,30 @@
 							</div>
 						</div>
 					</div>
+
+                    <!-- Script to modify content one title -->
                     <script>
                         var cda = urlParams.get('cda');
                         console.log('cda: ', cda);
                         // Append the 'cda' value to the text content of the <span>
                         var spanElement = document.querySelector('.titleLabel.title');
                         if (cda && spanElement) {
-                            spanElement.textContent += ' ' + cda;
+                            spanElement.textContent += ' ' + ' ';
                         }
                     </script>
+
+                    <!-- river reservoir report contents here -->
                     <div id="loading_river_reservoir" style="display: none;"><img src="../../images/loading4.gif" style='height: 50px; width: 50px;' alt="Loading..." /></div>
                     <div id="table_container_river_reservoir"></div>
                     <div id="table_container_river_reservoir_lake"></div>
                     <script src="river_reservoir_cda.js"></script>
-                    <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+                    <!-- Second Content Block -->
                     <div class="page-content">
                         <sidebar id="sidebar">
                         <!--Side bar content populated here by JavaScript Tag at end of body -->
                         </sidebar>
                         <div id="topPane" class="col-md backend-cp-collapsible">
-                            <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
                             <div class="box-usace">
                                 <h2 class="box-header-striped">
                                     <span class="titleLabel title">Note</span>
@@ -131,7 +135,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
                         </div>
                     </div>
                 </div>
@@ -154,4 +157,3 @@
         </script>
     </body>
 </html>
-<?php db_disconnect($db); ?>
