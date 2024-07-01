@@ -1,5 +1,5 @@
-<?php require_once('../private/initialize.php'); 
-//require_login();
+<?php
+require_once('../../../php_data_api/private/initialize.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -21,6 +21,6 @@ $set_options = set_options($db);
 // Get all the variables from the query parameters
 $cwms_ts_id = $_GET['cwms_ts_id'];
 
-$record_stage = get_record_stage($db, $cwms_ts_id);
+$record_stage = get_record_stage2($db, $cwms_ts_id);
 echo json_encode($record_stage);
 ?>

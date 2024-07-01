@@ -1,5 +1,5 @@
-<?php require_once('../private/initialize.php'); 
-//require_login();
+<?php
+require_once('../../../php_data_api/private/initialize.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -24,7 +24,6 @@ $nws_day1_date = $_GET['nws_day1_date'];
 $nws_day2_date = $_GET['nws_day2_date'];
 $nws_day3_date = $_GET['nws_day3_date'];
 
-
-$data = find_nws_forecast($db, $cwms_ts_id, $nws_day1_date, $nws_day2_date, $nws_day3_date);
+$data = find_nws_forecast2($db, $cwms_ts_id, $nws_day1_date, $nws_day2_date, $nws_day3_date);
 echo json_encode($data);
 ?>

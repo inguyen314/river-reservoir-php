@@ -1,5 +1,5 @@
-<?php require_once('../private/initialize.php'); 
-//require_login();
+<?php
+require_once('../../../php_data_api/private/initialize.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -21,6 +21,6 @@ $set_options = set_options($db);
 // Get all the variables from the query parameters
 $location_id = $_GET['location_id'];
 
-$precip = get_precip($db, $location_id);
+$precip = get_precip_lake($db, $location_id);
 echo json_encode($precip);
 ?>

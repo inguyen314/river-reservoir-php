@@ -2765,5 +2765,5 @@ function updateNwsForecastTimeHTML(filteredData, forecastTimeCell) {
     const formattedDateTime = `${month}-${day}-${year} ${hours}:${minutes} ${period}`;
     
     // Update the HTML content
-    forecastTimeCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${formattedDateTime}</div>`;
+    forecastTimeCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option Yet">${formattedDateTime}</div>`;
 }
