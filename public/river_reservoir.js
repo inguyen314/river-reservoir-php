@@ -683,7 +683,7 @@ function fetchAndUpdateStage(stageCell, deltaCell, tsid_stage_rev, tsid_stage_29
     console.log("stageQueryString: " + stageQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    const urlStage = `get_stage.php?${stageQueryString}`;
+    const urlStage = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_level.php?${stageQueryString}`;
 
     // Perform two fetch requests
     fetch(urlStage)
@@ -752,7 +752,7 @@ function fetchAndUpdateNws(nwsCell, forecastTimeCell, tsid_stage_nws_3_day_forec
     const queryStringNWS = Object.keys(dataToSendNWSDay1).map(key => key + '=' + dataToSendNWSDay1[key]).join('&');
     console.log("queryStringNWS: " + queryStringNWS);
 
-    const urlNWS = `get_nws_forecast.php?${queryStringNWS}`;
+    const urlNWS = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_nws_forecast2.php?${queryStringNWS}`;
     console.log("urlNWS: " + urlNWS);
 
     fetch(urlNWS)
@@ -849,8 +849,8 @@ function fetchAndUpdateCrest(crestCell, tsid_crest, flood_level) {
         console.log("queryStringcrest: " + queryStringcrest);
     
         // Make an AJAX request to the PHP script, passing all the variables
-        const urlcrest = `get_crest.php?${queryStringcrest}`;
-        console.log("urlcrest: " + "https://wm.mvs.ds.usace.army.mil/district_templates/gage_data/public/" + urlcrest);
+        const urlcrest = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_crest.php?${queryStringcrest}`;
+        console.log("urlcrest: ", urlcrest);
         fetch(urlcrest)
         .then(response => response.json())
         .then(crest => {
@@ -926,8 +926,8 @@ function fetchAndUpdateRecordStage(recordStageCell, recordStageDateCell, tsid_st
     console.log("recordStageQueryString: " + recordStageQueryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    var recordStageURL = `get_record_stage.php?${recordStageQueryString}`;
-    console.log("recordStageURL: " + "https://wm.mvs.ds.usace.army.mil/district_templates/gage_data/public/" + recordStageURL);
+    var recordStageURL = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_record_stage2.php?${recordStageQueryString}`;
+    console.log("recordStageURL: ", recordStageURL);
     fetch(recordStageURL)
     .then(response => response.json())
     .then(recordStage => {
