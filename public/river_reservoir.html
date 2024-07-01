@@ -54,9 +54,47 @@
 								<div class="box-content" style="background-color:white;margin:auto">
 									<div class="content">
 										<!-- Box Content Here -->
-                                        <span><h3><a href='river_reservoir.php'>Switch to PHP</a></h3></span> 
-                                        <span><h3><a href='river_reservoir.html?cda=internal'>Switch to Cloud Internal</a></h3></span>
-                                        <span><h3><a href='river_reservoir.html?cda=public'>Switch to Cloud Public</a></h3></span>
+                                        <script>
+                                            // Calculate the document root
+                                            const documentRoot = window.location.protocol + "//" + window.location.host + "/";
+
+                                            // Check if the document root matches the specified URL
+                                            if (documentRoot === "https://wm.mvs.ds.usace.army.mil/") {
+                                                // Select the div with the class 'content'
+                                                const contentDiv = document.querySelector('.content');
+                                                
+                                                if (contentDiv) {
+                                                    // Create the first h3 element with a link
+                                                    const h3_1 = document.createElement('h3');
+                                                    const link1 = document.createElement('a');
+                                                    link1.href = "river_reservoir.php";
+                                                    link1.textContent = "Switch to PHP";
+                                                    h3_1.appendChild(link1);
+                                                    contentDiv.appendChild(h3_1);
+
+                                                    // Create the second h3 element with a link
+                                                    const h3_2 = document.createElement('h3');
+                                                    const link2 = document.createElement('a');
+                                                    link2.href = "river_reservoir.html?cda=internal";
+                                                    link2.textContent = "Switch to Cloud Internal";
+                                                    h3_2.appendChild(link2);
+                                                    contentDiv.appendChild(h3_2);
+
+                                                    // Create the third h3 element with a link
+                                                    const h3_3 = document.createElement('h3');
+                                                    const link3 = document.createElement('a');
+                                                    link3.href = "river_reservoir.html?cda=public";
+                                                    link3.textContent = "Switch to Cloud Public";
+                                                    h3_3.appendChild(link3);
+                                                    contentDiv.appendChild(h3_3);
+                                                } else {
+                                                    console.error('No element with class "content" found.');
+                                                }
+                                            } else {
+                                                console.log('Document root does not match the specified URL.');
+                                            }
+
+                                        </script>
 									</div>
 								</div>
 							</div>
