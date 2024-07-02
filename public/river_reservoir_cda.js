@@ -2703,7 +2703,7 @@ async function fetchDataFromNwsForecastsOutput() {
 // Function to filter ROutput data by tsid_stage_nws_3_day_forecast
 function filterDataByTsid(NwsOutput, cwms_ts_id) {
     const filteredData = NwsOutput.filter(item => {
-        return item !== null && item.cwms_ts_id === cwms_ts_id;
+        return item !== null && item.cwms_ts_id_day1 === cwms_ts_id;
     });
 
     return filteredData;
@@ -2736,7 +2736,7 @@ function updateNwsForecastTimeHTML(filteredData, forecastTimeCell) {
         return;
     }
 
-    const entryDate = locationData.data_entry_date;
+    const entryDate = locationData.data_entry_date_cst1;
     
     // Parse the entry date string
     const dateParts = entryDate.split('-'); // Split by hyphen
