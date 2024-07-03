@@ -2652,7 +2652,7 @@ function updateFlowEveningHTML(filteredData, eveningCell) {
 // Function to update the HTML element with filtered data
 function updateRuleCurveHTML(filteredData, seasonalRuleCurveCell) {
     const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
-    seasonalRuleCurveCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.rule_curve}</div>`;
+    seasonalRuleCurveCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${(parseFloat(locationData.rule_curve)).toFixed(2)}</div>`;
 }
 
 // Function to update the HTML element with filtered data
@@ -2765,5 +2765,5 @@ function updateNwsForecastTimeHTML(filteredData, forecastTimeCell) {
     const formattedDateTime = `${month}-${day}-${year} ${hours}:${minutes} ${period}`;
     
     // Update the HTML content
-    forecastTimeCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option Yet">${formattedDateTime}</div>`;
+    forecastTimeCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP exportNwsForecasts2Json.json Output, No Cloud Option Yet">${formattedDateTime}</div>`;
 }
