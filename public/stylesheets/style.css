@@ -61,11 +61,11 @@ hr {
 
 .hard_coded {
 	color: black; /* Base text color */
-	text-shadow: 0 0 5px orange;
+	text-shadow: 0 0 2px orange;
 }
 .hard_coded_php {
 	color: black; /* Base text color */
-	text-shadow: 0 0 5px purple;
+	text-shadow: 0 0 2px purple;
 }
 
 /*** ===================================================================================== ***/
