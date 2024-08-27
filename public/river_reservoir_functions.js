@@ -1412,15 +1412,12 @@ function fetchStorageUtilized(conservationCell, floodCell, tsidStorage, flood_le
                     // CONSERVATION CALCULATION
                     if (valueLast > 0.0 && top_of_conservation > 0.0 && bottom_of_conservation >= 0.0) {
                         if (valueLast < bottom_of_conservation) {
-                            // console.log("Storage Less than Bottom of Conservation.", valueLast, "<", bottom_of_conservation);
-                            innerHTMLConservation = "<span title='Lake Storage > 0, Top of Conservation > 0, and Bottom of Conservation > 0'>" + "0.0%" + "</span>";
+                            innerHTMLConservation = "<span title='Lake Storage < Bottom of Conservation'>" + "0.0%" + "</span>";
                         } else if (valueLast > top_of_conservation) {
-                            // console.log("Storage Greater than Top of Conservation.", valueLast, ">", top_of_conservation);
-                            innerHTMLConservation = "<span title='" + "Lake Storage > Top of Conservation: " + valueLast + " > " + top_of_conservation + "'>" + "100.0%" + "</span>";
+                            innerHTMLConservation = "<span title='" + "Lake Storage > Top of Conservation: " + valueLast.toFixed(0) + " > " + top_of_conservation.toFixed(0) + "'>" + "100.0%" + "</span>";
                         } else {
                             const total = (valueLast - bottom_of_conservation) / (top_of_conservation - bottom_of_conservation) * 100;
-                            // console.log("total: ", total);
-                            innerHTMLConservation = "<span title='" + "(" + valueLast + " (" + timestampLast + ") " + "(Lake Storage)" + " - " + bottom_of_conservation+ "(Bottom of Conservation)" + ")/(" + top_of_conservation + "(Top of Conservation)" + "-" + bottom_of_conservation + "(Bottom of Conservation)" + ")*100" + " = " + total+ "'>" + total.toFixed(1) + "</span>";
+                            innerHTMLConservation = "<span title='" + "(" + valueLast.toFixed(0) + " (" + timestampLast + ") " + "(Lake Storage)" + " - " + bottom_of_conservation.toFixed(0) + "(Bottom of Conservation)" + ")/(" + top_of_conservation.toFixed(0) + "(Top of Conservation)" + "-" + bottom_of_conservation.toFixed(0) + "(Bottom of Conservation)" + ")*100" + " = " + total + "'>" + total.toFixed(1) + "%" + "</span>";
                         }
                     } else {
                         innerHTMLConservation = " ";
@@ -1431,15 +1428,12 @@ function fetchStorageUtilized(conservationCell, floodCell, tsidStorage, flood_le
                     // FLOOD CALCULATION
                     if (valueLast > 0.0 && top_of_flood > 0.0 && bottom_of_flood >= 0.0) {
                         if (valueLast < bottom_of_flood) {
-                            // console.log("Storage Less than Bottom of Flood");
-                            innerHTMLFlood = "<span title='Lake Storage > 0, Top of Flood > 0, and Bottom of Flood > 0'>" + "0.0%" + "</span>";
+                            innerHTMLFlood = "<span title='Lake Storage < Bottom of Flood'>" + "0.0%" + "</span>";
                         } else if (valueLast > top_of_flood) {
-                            // console.log("Storage Greater than Top of Flood");
-                            innerHTMLFlood = "<span title='" + "Lake Storage > Top of Flood: " + valueLast + " > " + top_of_flood + "'>" + "100.0%" + "</span>";
+                            innerHTMLFlood = "<span title='" + "Lake Storage > Top of Flood: " + valueLast.toFixed(0) + " > " + top_of_flood.toFixed(0) + "'>" + "100.0%" + "</span>";
                         } else {
                             const total = ((valueLast) - (bottom_of_flood)) / ((top_of_flood) - (bottom_of_flood)) * 100;
-                            // console.log("total: ", total);
-                            innerHTMLFlood = "<span title='" + "(" + valueLast + " (" + timestampLast + ") " + "(Lake Storage)" + " - " + bottom_of_flood + "(Bottom of Flood)" + ")/(" + top_of_flood + "(Top of Flood)" + "-" + bottom_of_flood + "(Bottom of Flood)" + ")*100" + " = " + total + "'>" + total.toFixed(1) + "</span>";
+                            innerHTMLFlood = "<span title='" + "(" + valueLast.toFixed(0) + " (" + timestampLast + ") " + "(Lake Storage)" + " - " + bottom_of_flood.toFixed(0) + "(Bottom of Flood)" + ")/(" + top_of_flood.toFixed(0) + "(Top of Flood)" + "-" + bottom_of_flood.toFixed(0) + "(Bottom of Flood)" + ")*100" + " = " + total + "'>" + total.toFixed(1) + "%" + "</span>";
                         }
                     } else {
                         innerHTMLFlood = " ";
@@ -2108,10 +2102,10 @@ async function fetchAndLogFlowData(location_id, midnightCell, eveningCell, seaso
         updateRuleCurveHTML(filteredData, seasonalRuleCurveCell);
 
         // Update the HTML element with filtered data
-        updateCrestHTML(filteredData, crestCell);
+        updateLakeCrestHTML(filteredData, crestCell);
 
         // Update the HTML element with filtered data
-        updateCrestDateHTML(filteredData, crestDateCell);
+        updateLakeCrestDateHTML(filteredData, crestDateCell);
 
         // Further processing of ROutput data as needed
     } catch (error) {
@@ -2139,9 +2133,9 @@ function updateRuleCurveHTML(filteredData, seasonalRuleCurveCell) {
 }
 
 // Function to update the HTML element with filtered data
-function updateCrestHTML(filteredData, crestCell) {
+function updateLakeCrestHTML(filteredData, crestCell) {
     const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
-    if (locationData.crest !== 999.99) {
+    if (locationData.crest) {
         crestCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.crest}</div>`;
     } else {
         crestCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet"></div>`;
@@ -2149,12 +2143,12 @@ function updateCrestHTML(filteredData, crestCell) {
 }
 
 // Function to update the HTML element with filtered data
-function updateCrestDateHTML(filteredData, crestDateCell) {
+function updateLakeCrestDateHTML(filteredData, crestDateCell) {
     const locationData = filteredData[Object.keys(filteredData)[0]]; // Get the first (and only) key's data
-    if (locationData.crest !== 999.99) {
+    if (locationData.crest) {
         crestDateCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet">${locationData.crest_date_time}</div>`;
     } else {
-        crestCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet"></div>`;
+        crestDateCell.innerHTML = `<div class="hard_coded_php" title="Uses PHP Json Output, No Cloud Option to Access Custom Schema Yet"></div>`;
     }
 }
 
