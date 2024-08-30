@@ -632,6 +632,196 @@ function createRiverTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3
 
 
 /******************************************************************************
+ *                         MORNING RIVER BOARD DATA                           *
+ ******************************************************************************/
+// Function to create and populate the river table header
+function createMorningRiverBoardDataTableHeader(nws_day1_date_title, nws_day2_date_title, nws_day3_date_title) {
+    // Create a table element
+    const table = document.createElement('table');
+    table.setAttribute('id', 'webrep');
+
+    // TITLE ROW 1
+    // Create a table header row
+    const headerRow = table.insertRow(0);
+
+    // Create table headers for the desired columns
+    const columns = ["Gage Station", "6am Level", "24hr Delta"];
+
+    columns.forEach((columnName) => {
+        const th = document.createElement('th');
+        th.textContent = columnName;
+        th.style.backgroundColor = 'darkblue'; // Set background color to dark blue
+        th.style.padding ='15px';
+        headerRow.appendChild(th);
+    });
+
+
+    // Append the table to the document or a specific container
+    const tableContainerWebrep = document.getElementById('table_container_river_reservoir');
+    if (tableContainerWebrep) {
+        tableContainerWebrep.appendChild(table);
+    }
+}
+
+// Function to create and populate the river table body
+function createMorningRiverBoardDataTableBody(mergedData, nws_day1_date, nws_day2_date, nws_day3_date) {
+    const tableBody = document.querySelector('#webrep tbody');
+
+    mergedData.forEach(basinData => {
+        // Create a row for the basin with colspan=11
+        const basinRow = document.createElement('tr');
+        const basinCell = document.createElement('td');
+        basinCell.colSpan = 4;
+        basinCell.innerHTML = basinData.basin;
+        basinCell.style.textAlign = 'left';
+        basinCell.style.fontWeight = 'bold';
+        basinRow.appendChild(basinCell);
+        tableBody.appendChild(basinRow);
+
+        // Get current date and time
+        const currentDateTime = new Date();
+        // console.log('currentDateTime:', currentDateTime);
+
+        // Subtract two hours from current date and time
+        const currentDateTimeMinus2Hours = subtractHoursFromDate(currentDateTime, 2);
+        // console.log('currentDateTimeMinus2Hours :', currentDateTimeMinus2Hours);
+
+        // Subtract thirty hours from current date and time
+        const currentDateTimeMinus30Hours = subtractHoursFromDate(currentDateTime, 64);
+        // console.log('currentDateTimeMinus30Hours :', currentDateTimeMinus30Hours);
+
+        // Add thirty hours to current date and time
+        const currentDateTimePlus30Hours = plusHoursFromDate(currentDateTime, 30);
+        // console.log('currentDateTimePlus30Hours :', currentDateTimePlus30Hours);
+
+        // Add four days to current date and time
+        const currentDateTimePlus4Days = addDaysToDate(currentDateTime, 4);
+        // console.log('currentDateTimePlus4Days :', currentDateTimePlus4Days);
+
+        // Add fourteen days to current date and time
+        const currentDateTimePlus14Days = addDaysToDate(currentDateTime, 14);
+        // console.log('currentDateTimePlus14Days :', currentDateTimePlus14Days);
+
+        // Subtract thirty hours from current date and time
+        const currentDateTimeMinus48Hours = subtractHoursFromDate(currentDateTime, 48);
+        // console.log('currentDateTimeMinus48Hours :', currentDateTimeMinus48Hours);
+
+
+        // Check if basin has gages and gages is an array
+        if (Array.isArray(basinData.gages) && basinData.gages.length > 0) {
+            // Iterate through each gage in the current basin's gages
+            basinData.gages.forEach(locData => {
+                if (locData.river_reservoir === true) { // Check if river_reservoir is true
+                    const locationRow = document.createElement('tr');
+
+                    // SETTING UP VARIABLES
+                    // Prepare c_count to get 24 hour values to calculate delta 
+                    let c_count = null;
+                    c_count = locData.c_count;
+                    // console.log("c_count hardcoded:", c_count);
+
+                    let flood_level = null;
+                    // Check if locData has the 'flood' property and if its 'constant-value' is not null
+                    if (locData.flood_level !== null) {
+                        // Check conditions for flood level value and format it to two decimal places if it falls within range
+                        if (
+                            locData.flood["constant-value"] === null ||
+                            parseFloat(locData.flood["constant-value"]).toFixed(2) == 0.00 ||
+                            parseFloat(locData.flood["constant-value"]).toFixed(2) > 900
+                        ) {
+                            flood_level = null; // If flood level is null or outside range, set flood_level to an empty string
+                        } else {
+                            flood_level = parseFloat(locData.flood["constant-value"]).toFixed(2); // Otherwise, format flood level to two decimal places
+                        }
+                    } else {
+                        flood_level = null;
+                    }
+
+                    if (locData.visible === true && locData.river_reservoir === true) {
+                        // console.log("visible and river_reservoir are true");
+
+                        // LOCATION
+                        const rivermileCell = document.createElement('td');
+                        rivermileCell.innerHTML = "<span title='" + locData.location_id + "'>" + locData.metadata["public-name"] + "<span>";
+                        locationRow.appendChild(rivermileCell);
+
+                        // STAGE CURRENT
+                        const stageCell = document.createElement('td');
+                        stageCell.textContent = "";
+
+
+                        // DELTA
+                        const deltaCell = document.createElement('td');
+                        deltaCell.textContent = "";
+
+                        const tsidStage = locData.display_stage_29 ? locData.tsid_stage_29 : locData.tsid_stage_rev;
+                        fetchMorningStage(stageCell, deltaCell, tsidStage, flood_level, currentDateTimeMinus2Hours, currentDateTime, currentDateTimeMinus30Hours);
+                        locationRow.appendChild(stageCell);
+                        locationRow.appendChild(deltaCell);
+
+
+                        // // NWS THREE DAYS FORECAST
+                        // const nwsCell = document.createElement('td');
+                        // nwsCell.textContent = "";
+
+
+                        // // NWS THREE DAYS FORECAST TIME
+                        // const forecastTimeCell = document.createElement('td');
+                        // forecastTimeCell.textContent = "";
+
+                        // fetchNwsForecast(nwsCell, forecastTimeCell, locData.tsid_stage_rev, locData.tsid_stage_nws_3_day_forecast, flood_level, currentDateTime, currentDateTimePlus4Days);
+                        // locationRow.appendChild(nwsCell);
+                        // locationRow.appendChild(forecastTimeCell);
+
+
+                        // // CREST AND DATE
+                        // const crestCell = document.createElement('td');
+                        // crestCell.textContent = "";
+                        // fetchCrest(crestCell, locData.tsid_crest, flood_level, currentDateTime, currentDateTimePlus14Days);
+                        // locationRow.appendChild(crestCell);
+
+
+                        // // FLOOD LEVEL
+                        // const floodCell = document.createElement('td');
+                        // floodCell.innerHTML = "<span title='" + locData.level_id + "'>" + (flood_level === null ? "" : flood_level) + "<span>";
+                        // locationRow.appendChild(floodCell);
+
+
+                        // // GAGE ZERO
+                        // const elevationCell = document.createElement('td');
+                        // elevationCell.innerHTML = "<span class='" + (locData.metadata["vertical-datum"] === "NGVD29" ? "ngvd29" : "--") + "' title='" + locData.metadata["vertical-datum"] + "'>" + (parseFloat(locData.metadata["elevation"])).toFixed(2) + "<span>";
+                        // locationRow.appendChild(elevationCell);
+
+
+                        // // RECORD STAGE
+                        // const recordStageCell = document.createElement('td');
+                        // if (locData.recordstage !== null && locData.recordstage !== undefined) {
+                        //     recordStageCell.innerHTML = (locData.recordstage["constant-value"]).toFixed(2);
+                        // } else {
+                        //     recordStageCell.innerHTML = "";
+                        // }
+                        // locationRow.appendChild(recordStageCell);
+
+
+                        // // RECORD DATE
+                        // const recordStageDateCell = document.createElement('td');
+                        // if (locData.recordstage !== null && locData.recordstage !== undefined) {
+                        //     recordStageDateCell.innerHTML = '<div class="hard_coded" title="Hard Coded in JSON, No Cloud Option Yet">' + locData.record_stage_date_hard_coded + '</div>';
+                        // }
+                        // locationRow.appendChild(recordStageDateCell);
+                    }
+
+                    // Append locationRow to tableBody
+                    tableBody.appendChild(locationRow);
+                }
+            })
+        }
+
+    });
+
+}
+
+/******************************************************************************
  *                          LAKE TABLE FUNCTIONS                              *
  ******************************************************************************/
 // Function to create and populate the table header for Reservoirs
@@ -1208,6 +1398,143 @@ function fetchCrest(crestCell, tsidCrest, flood_level, currentDateTime, currentD
                     innerHTMLCrest = "<span class='" + floodClass + "' title='" + crest.name + ", Value = " + valueLastCrest + ", Date Time = " + timestampLastCrest + "'>" + valueLastCrest + " " + timestampLastCrest.substring(0, 5) + "</span>";
                 }
                 crestCell.innerHTML = innerHTMLCrest;
+            })
+            .catch(error => {
+                // Catch and log any errors that occur during fetching or processing
+                console.error("Error fetching or processing data:", error);
+            });
+    }
+}
+
+
+/******************************************************************************
+ *                         MORNING RIVER BOARD DATA                           *
+ ******************************************************************************/
+// Function to get stage data
+function fetchMorningStage(stageCell, deltaCell, tsidStage, flood_level, currentDateTimeMinus2Hours, currentDateTime, currentDateTimeMinus30Hours) {
+    if (tsidStage !== null) {
+        // Fetch the time series data from the API using the determined query string
+        let urlStage = null;
+        if (cda === "public") {
+            urlStage = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsidStage}&begin=${currentDateTimeMinus30Hours.toISOString()}&end=${currentDateTime.toISOString()}&office=MVS`;
+        } else if (cda === "internal") {
+            urlStage = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsidStage}&begin=${currentDateTimeMinus30Hours.toISOString()}&end=${currentDateTime.toISOString()}&office=MVS`;
+        } else {
+
+        }
+        // console.log("urlStage = ", urlStage);
+        fetch(urlStage, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json;version=2'
+            }
+        })
+            .then(response => {
+                // Check if the response is ok
+                if (!response.ok) {
+                    // If not, throw an error
+                    throw new Error('Network response was not ok');
+                }
+                // If response is ok, parse it as JSON
+                return response.json();
+            })
+            .then(stage => {
+                // console.log("stage:", stage);
+
+                // Convert timestamps in the JSON object
+                stage.values.forEach(entry => {
+                    entry[0] = formatNWSDate(entry[0]); // Update timestamp
+                });
+
+                // console.log("stageFormatted = ", stage);
+
+                // Get the last non-null value from the stage data
+                const lastNonNullValue = getLastNonNull6amValue(stage);
+                // console.log("lastNonNullValue:", lastNonNullValue);
+
+                // Check if a non-null value was found
+                if (lastNonNullValue !== null) {
+                    // Extract timestamp, value, and quality code from the last non-null value
+                    var timestampLast = lastNonNullValue.timestamp;
+                    var valueLast = parseFloat(lastNonNullValue.value).toFixed(2);
+                    var qualityCodeLast = lastNonNullValue.qualityCode;
+
+                    // Log the extracted valueLasts
+                    // console.log("timestampLast:", timestampLast);
+                    // console.log("valueLast:", valueLast);
+                    // console.log("qualityCodeLast:", qualityCodeLast);
+                } else {
+                    // If no non-null valueLast is found, log a message
+                    // console.log("No non-null valueLast found.");
+                }
+
+                const c_count = calculateCCount(tsidStage);
+                // console.log("c_count:", c_count);
+
+                const lastNonNull24HoursValue = getLastNonNull24Hours6amValue(stage, c_count);
+                // console.log("lastNonNull24HoursValue:", lastNonNull24HoursValue);
+
+                // Check if a non-null value was found
+                if (lastNonNull24HoursValue !== null) {
+                    // Extract timestamp, value, and quality code from the last non-null value
+                    var timestamp24HoursLast = lastNonNull24HoursValue.timestamp;
+                    var value24HoursLast = parseFloat(lastNonNull24HoursValue.value).toFixed(2);
+                    var qualityCode24HoursLast = lastNonNull24HoursValue.qualityCode;
+
+                    // Log the extracted valueLasts
+                    // console.log("timestamp24HoursLast:", timestamp24HoursLast);
+                    // console.log("value24HoursLast:", value24HoursLast);
+                    // console.log("qualityCode24HoursLast:", qualityCode24HoursLast);
+                } else {
+                    // If no non-null valueLast is found, log a message
+                    // console.log("No non-null valueLast found.");
+                }
+
+                // Calculate the 24 hours change between first and last value
+                const delta_24 = (valueLast - value24HoursLast).toFixed(2);
+                // console.log("delta_24:", delta_24);
+
+                // Format the last valueLast's timestampLast to a string
+                const formattedLastValueTimeStamp = formatTimestampToString(timestampLast);
+                // console.log("formattedLastValueTimeStamp = ", formattedLastValueTimeStamp);
+
+                // Create a Date object from the timestampLast
+                const timeStampDateObject = new Date(timestampLast);
+                // console.log("timeStampDateObject = ", timeStampDateObject);
+
+                // Subtract 24 hours (24 * 60 * 60 * 1000 milliseconds) from the timestampLast date
+                const timeStampDateObjectMinus24Hours = new Date(timestampLast - (24 * 60 * 60 * 1000));
+                // console.log("timeStampDateObjectMinus24Hours = ", timeStampDateObjectMinus24Hours);
+
+
+                // FLOOD CLASS
+                var floodClass = determineStageClass(valueLast, flood_level);
+                // console.log("floodClass:", floodClass);
+
+                // DATATIME CLASS
+                // var dateTimeClass = determineDateTimeClass(timeStampDateObject, currentDateTimeMinus2Hours);
+                // console.log("dateTimeClass:", dateTimeClass);
+
+                if (valueLast === null) {
+                    innerHTMLStage = "<span class='missing'>"
+                        + "-M-"
+                        + "</span>"
+                        + "<span class='--'>"
+                        + "label"
+                        + "</span>";
+                } else {
+                    innerHTMLStage = "<span class='" + floodClass + "' title='" + stage.name + ", Value = " + valueLast + ", Date Time = " + timestampLast + "'>"
+                        + "<a href='../../../district_templates/chart/public/chart.html?cwms_ts_id=" + stage.name + "&start_day=4&end_day=0' target='_blank'>"
+                        + valueLast
+                        + "</a>"
+                        + "</span>";
+                    innerHTMLDelta = "<span title='" + stage.name + ", Value = " + value24HoursLast + ", Date Time = " + timestamp24HoursLast + ", Delta = (" + valueLast + " - " + value24HoursLast + ") = " + delta_24 + "'>"
+                        + delta_24
+                        + "</span>";
+
+                }
+                stageCell.innerHTML = innerHTMLStage;
+                deltaCell.innerHTML = innerHTMLDelta;
             })
             .catch(error => {
                 // Catch and log any errors that occur during fetching or processing
@@ -2038,6 +2365,52 @@ function extractValuesWithTimeNoon(values) {
         const minutes = timestamp.getMinutes();
         return (hours === 7 || hours === 6) && minutes === 0; // Check if time is 13:00
     });
+}
+
+function getLastNonNull6amValue(data) {
+    // console.log(data);
+
+    // Helper function to check if the time is 6 AM
+    function is6AM(timestamp) {
+        const date = new Date(timestamp);
+        return date.getHours() === 6 && date.getMinutes() === 0;
+    }
+
+    // Iterate over the values array in reverse
+    for (let i = data.values.length - 1; i >= 0; i--) {
+        const [timestamp, value, qualityCode] = data.values[i];
+        
+        // Check if the value at index i is not null and the timestamp is at 6 AM
+        if (value !== null && is6AM(timestamp)) {
+            // Return the non-null value with the correct timestamp and quality code
+            return {
+                timestamp,
+                value,
+                qualityCode
+            };
+        }
+    }
+
+    // If no non-null value at 6 AM is found, return null
+    return null;
+}
+
+// Find time series value at 24 hours ago
+function getLastNonNull24Hours6amValue(data, c_count) {
+    let nonNullCount = 0;
+    for (let i = data.values.length - 1; i >= 0; i--) {
+        if (data.values[i][1] !== null) {
+            nonNullCount++;
+            if (nonNullCount > c_count) {
+                return {
+                    timestamp: data.values[i][0],
+                    value: data.values[i][1],
+                    qualityCode: data.values[i][2]
+                };
+            }
+        }
+    }
+    return null;
 }
 
 

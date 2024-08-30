@@ -96,7 +96,15 @@
                                                     link3.textContent = "Switch to Cloud Public";
                                                     h3_3.appendChild(link3);
                                                     contentDiv.appendChild(h3_3);
-                                                } else {
+                                                } else if (type === "morning") {
+                                                    // Create the first h3 element with a link
+                                                    const h3_1 = document.createElement('h3');
+                                                    const link1 = document.createElement('a');
+                                                    link1.href = "https://wm.mvs.ds.usace.army.mil/web_apps/reports/public/morning_report.php";
+                                                    link1.textContent = "Switch to PHP";
+                                                    h3_1.appendChild(link1);
+                                                    contentDiv.appendChild(h3_1);
+
                                                     // Create the second h3 element with a link
                                                     const h3_2 = document.createElement('h3');
                                                     const link2 = document.createElement('a');
@@ -134,11 +142,17 @@
                         if (cda && spanElement) {
                             spanElement.textContent += ' ' + ' ';
                         }
-                    } else {
+                    } else if (type === "morning") {
                         // Append the 'cda' value to the text content of the <span>
                         var spanElement = document.querySelector('.titleLabel.title');
                         if (cda && spanElement) {
-                            spanElement.textContent = 'Realtime River Board Data' + ' ';
+                            spanElement.textContent = 'Realtime Morning River Board Data' + ' ';
+                        }
+                    } else {
+                        // Append the 'cda' value to the text content of the <span>
+                            var spanElement = document.querySelector('.titleLabel.title');
+                        if (cda && spanElement) {
+                            spanElement.textContent = '--' + ' ';
                         }
                     }
                 </script>
@@ -168,9 +182,14 @@
 
                         // Insert the content into the placeholder div
                         document.getElementById('content-placeholder').innerHTML = content;
-                    } else {
+                    } else if (type === "morning") {
                         // Create HTML content as a string
-                        const content = `<div id="table_container_morning"></div>`;
+                        const content = `
+                                        <div id="loading_river_reservoir" style="display: none;">
+                                            <img src="../../images/loading4.gif" style="height: 50px; width: 50px;" alt="Loading..." />
+                                        </div>
+                                        <div id="table_container_river_reservoir"></div>
+                                    `;
 
                         // Insert the content into the placeholder div
                         document.getElementById('content-placeholder').innerHTML = content;
