@@ -59,9 +59,9 @@ if (ini_get('date.timezone')) {
 								<div class="box-content" style="background-color:white;margin:auto">
 									<div class="content">
 										<!-- Box Content Here -->
-										<span><h3><a href='river_reservoir.php'>Switch to PHP</a></h3></span> 
+										<!-- <span><h3><a href='river_reservoir.php'>Switch to PHP</a></h3></span> 
                                         <span><h3><a href='river_reservoir.html?cda=internal'>Switch to Cloud Internal</a></h3></span>
-                                        <span><h3><a href='river_reservoir.html?cda=public'>Switch to Cloud Public</a></h3></span>
+                                        <span><h3><a href='river_reservoir.html?cda=public'>Switch to Cloud Public</a></h3></span> -->
 									</div>
 								</div>
 							</div>
